@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content%}
+
+<body>
+  <br>
+  <br>
+  <br>
+<div>
+        <br>
+
+        <div class="ml-container">
+
+          <form action="{{ url_for('prediction')}}" method="POST">
+          <p>Help us know your interest better </p>
+          <!-- <input type="text" name="comment"/> -->
+          <textarea name="comment" rows="4" cols="50"></textarea>
+          <br/>
+      
+          <input type="submit" class="btn-info" value="prediction">
+          
+        </form>
+          
+        </div>
+      
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <p style="margin-top:3em;">
+        Liked it? Spend a moment from you precious time to provide us valuable feedback. <i class="fas fa-smile"></i> Thank you <i class="fas fa-heart"></i>
+        </p>
+        </div>
+  {% endblock %}
+</body>

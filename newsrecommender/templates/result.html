@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+<body>
+
+{% block content %}
+<br>
+<br>
+<br>
+
+	
+	<div class="results">
+
+    <h1> Your interest is : </h1>
+	<h2 style="color:red;"> {{prediction}}</h2> 
+	<h1> Here are some articles that you may like   </h1>
+	{% for a, b, c in list %}
+    
+        <article class="media content-section">
+          
+          <div class="media-body">
+            <div class="article-metadata">
+              
+			  <h2 class="text-muted">{{b}}</h2><br>
+			  <small>{{a}}</small><br>
+              <strong>{{c}}</strong>
+            
+              
+            </div>
+            
+          </div>
+        </article>
+    {% endfor %}
+
+
+
+	</div>
+{% endblock %}
+</body>

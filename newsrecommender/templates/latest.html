@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <h2>Latest News</h2><br>
+    {% for l in news %}
+        <article class="media content-section">
+          <div class="media-body">
+            <small>{{l.date}},{{l.topic}}</small>
+            <h3><a href="{{ url_for('latest',latest_id=l.id)}}"><strong>{{l.title}}</strong></a></h3><br>
+          </div>
+        </article>
+    {% endfor %}
+   
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content%}
+
+<body>
+  <br>
+  <br>
+  <br>
+  <strong>Thank you for helping us </strong>
+  <h1>Here are some articles that you may like</h1>
+<div>
+  {% for recommendation in recommendations %}
+        
+
+    
+    <a href="{{ url_for('article', recommendation_id=recommendation.id) }}">{{ recommendation.title }}</a><br>
+  
+
+{% endfor %}
+	      
+        
+        <br>
+
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <p style="margin-top:3em;">
+        Liked it? Spend a moment from you precious time to provide us valuable feedback. <i class="fas fa-smile"></i> Thank you <i class="fas fa-heart"></i>
+        </p>
+          </div>
+  {% endblock %}
+</body>

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+<body>
+
+{% block content %}
+<br>
+<br>
+<br>
+
+	
+	<div class="results">
+
+    <h1>Since you like  : </h1>
+	<h2 style="color:red;"> {{current_user.topic}}</h2> 
+	<h1> Here are some articles that you may like   </h1><br><br>
+	{% for a, b, c ,d in list %}
+    
+        <article class="media content-section">
+          
+          <div class="media-body">
+            <div class="article-metadata">
+              
+			  <h1 class="text-muted">{{a}}</h1>
+              <small>{{b}}</small><br>
+              <small>{{c}}</small><br>
+              <h2>{{d}}</h2><br><br>
+            
+              
+            </div>
+            
+          </div>
+        </article>
+    {% endfor %}
+
+
+
+	</div>
+{% endblock %}
+</body>

@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+<style>
+    .fa{
+        font-size: 100px;
+        cursor: pointer;
+        margin-left: 50%;
+        margin-top: 15%;
+    }
+    .fa:hover{
+        color: skyblue;
+
+    }
+</style>
+<br>
+<br>
+<body>
+        
+        {% block content %}
+        <h1>Please rate each Article based on your preference </h1>
+        <form action="{{ url_for('recommendation') }}" method="POST">
+            <div>
+            <p> <strong><font size="4" color="black">What is your rating to <font color="Maroon"> </font></strong><br/></p>
+            {% for a,b,c in tab %}
+
+            <i onclick="myfct(this)" class="fa fa-thumbs-up"><input type="checkbox" name="choice" id="choice" value={{a}}>{{b}} : {{c}}</i> <br>
+
+            </div>
+          
+
+            <script>
+                function myfct(x){
+                    x.classList.toggle("fa-thumbs-down");
+                }
+            </script>
+            {% endfor %}
+
+            
+
+            
+
+            <div>
+            <h3><font color="midnightblue">If you're sure about these ratings, go ahead and click this button!</h3>
+            </div>
+            <form action="{{ url_for('recommendation')}}" method="POST">
+                <input type="submit" id="submission_button" value="Get Recommendations"/>
+            </form>
+        {% endblock %}
+    </body>

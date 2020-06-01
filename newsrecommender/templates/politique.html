@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+    {% for a, b, c, d in politique %}
+    
+        <article class="media content-section">
+          
+          <div class="media-body">
+            <div class="article-metadata">
+              <h2>{{d}}</h2>
+              <p>{{b}}</p>
+              <strong class="text-muted">{{c}}</strong>
+            
+              
+            </div>
+            
+          </div>
+        </article>
+    {% endfor %}
+    
+  </div>
+</main>
+
+{% endblock content %}

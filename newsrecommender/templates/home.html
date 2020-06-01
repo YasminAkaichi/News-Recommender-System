@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+{% block content %}
+<h2>Recommended for you</h2><br>
+    {% for recommendation in recommendations %}
+        <article class="media content-section">
+          <div class="media-body">
+            <small>{{recommendation.date}}</small><br>
+            <h3><a class="article-title" href="{{ url_for('article', recommendation_id=recommendation.id) }}">{{ recommendation.title }}</a></h3><br>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
