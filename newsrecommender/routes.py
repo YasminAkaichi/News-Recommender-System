@@ -53,9 +53,9 @@ import plotly.offline as offline
 offline.init_notebook_mode()
 from collections import Counter
 import csv
+import datetime as dt
 from twitterscraper import query_tweets
 from twitterscraper import query_tweets_from_user as qtfu
-import datetime as dt
 from twitterscraper.query import query_user_info
 from multiprocessing import Pool
 import time
@@ -174,8 +174,8 @@ class CommentForm(FlaskForm):
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'aa7fbd472d40082d93ef896fc5934cd9'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-app.config['TWITTER_OAUTH_CLIENT_KEY']='LtPfi1X2RlpL8GYSKKZgUmVY9'
-app.config['TWITTER_OAUTH_CLIENT_SECRET']='szgPgeMh7Z7EhVeQE3c4qMCPxtfQQzWz8UjyFn7obnxcl8Qykd'
+app.config['TWITTER_OAUTH_CLIENT_KEY']='Cru31GFfxRfOFso0R07I5pZx3'
+app.config['TWITTER_OAUTH_CLIENT_SECRET']='kmicg6cVrlBigO2OtkfAi58HMO2NL635L58OUmLieIV35KR8bj'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 db = SQLAlchemy(app)
 db.init_app(app)
@@ -200,7 +200,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     comments = db.relationship('Comment', backref='author', lazy=True)
     recommendation=db.relationship('Recommendation', backref='author', lazy=True)
-    article = db.relationship('Article', backref='author', lazy=True)
+    article = db.relationship('Profile', backref='author', lazy=True)
     def __repr__(self):
         return f"User('{self.username}','{self.email}', '{self.image_file}')"
 
@@ -334,12 +334,12 @@ class Recommendation(db.Model):
     def __repr__(self):
         return f"Recommendation('{self.user_id}','{self.title}','{self.date}','{self.content}')"
 
-class Article(db.Model):
+class Profile(db.Model):
     id = db.Column(db.String, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
         nullable=False)
     def __repr__(self):
-        return f"Article('{self.id}','{self.user_id}')"
+        return f"Profile('{self.id}','{self.user_id}')"
 class Latest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title=db.Column(db.String(120),nullable=True)
@@ -698,7 +698,7 @@ def account():
 
 @app.route("/quiz", methods=["GET", "POST"])
 def rating():  
-    db.session.query(Article).delete() 
+    db.session.query(Profile).delete() 
     topic_list=['art','health','entertainment','sports','politics','society','economy','media','sci_tech','business','world','style']
     tab=[]
     top=[]
@@ -723,7 +723,7 @@ def rating():
         i-=1
     tab=zip(index,top,tit)
     if request.method=="POST":
-        db.session.query(Article).delete()
+        db.session.query(Profile).delete()
         return render_template('recommendation.html')
     
     return render_template('quiz.html',tab=tab)
@@ -737,9 +737,9 @@ def recommendation():
         Recommendation.query.filter_by(user_id=current_user.id).delete()
         table = request.form.getlist('choice')
         ARTICLES_READ=[]
-        db.session.query(Article).delete()
+        db.session.query(Profile).delete()
         for i in table:
-            artcl = Article(id=i, author=current_user)
+            artcl = Profile(id=i, author=current_user)
             db.session.add(artcl)
             db.session.commit()
 
@@ -775,14 +775,14 @@ def recommendation():
             db.session.add(recommend)
             db.session.commit()
         recommendations=db.session.query(Recommendation).filter_by(user_id=current_user.id).all()
-        db.session.query(Article).delete()
+        db.session.query(Profile).delete()
 
         
         return render_template('recommendation.html', recommendations = recommendations)
 def similarity():
     Recommendation.query.filter_by(user_id=current_user.id).delete()
     ARTICLES_READ=[]
-    table= [r.id for r in db.session.query(Article.id)]
+    table= [r.id for r in db.session.query(Profile.id)]
     ARTICLES_READ=[ int(x) for x in table ]
     article = pd.read_csv('ProcessedEnglish_news.csv')
     news_articles['index'] = list(range(len(news_articles.index)))
@@ -818,8 +818,8 @@ def similarity():
 @app.route("/article/<int:recommendation_id>")
 def article(recommendation_id):
     recommendation = Recommendation.query.get_or_404(recommendation_id)
-    db.session.query(Article).delete()
-    article=Article(id=recommendation_id,author=current_user)
+    db.session.query(Profile).delete()
+    article=Profile(id=recommendation_id,author=current_user)
     db.session.add(article)
     similarity()
     db.session.commit()
@@ -828,8 +828,8 @@ def article(recommendation_id):
 def latest(latest_id):
     similarity()
     latest = Latest.query.get_or_404(latest_id)
-    db.session.query(Article).delete()
-    article=Article(id=latest_id,author=current_user)
+    db.session.query(Profile).delete()
+    article=Profile(id=latest_id,author=current_user)
     db.session.add(article)
     db.session.commit()
     return render_template('latest_article.html', latest=latest)
@@ -993,6 +993,7 @@ def analize():
     if(index1=="sci_tech"):
         index1="Science Technology"
     return render_template('analize.html',index =index1,list=liste)
+
 def scrapping():  
     link = "https://globalnews.ca/"
     test=True        
@@ -1091,5 +1092,4 @@ def home():
     
 if __name__ == "__main__":
     app.run(debug=True)
-    
     
